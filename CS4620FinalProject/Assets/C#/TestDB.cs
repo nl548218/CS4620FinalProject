@@ -50,7 +50,7 @@ public class TestDB : MonoBehaviour
         dbConnection.Close();
 
     }
-        private void DbCommandRead(string text)
+    private void DbCommandRead(string text)
     {
         IDbConnection dbConnection = new SqliteConnection(dbName);
         dbConnection.Open();

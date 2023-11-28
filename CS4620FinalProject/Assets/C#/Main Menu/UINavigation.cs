@@ -20,12 +20,6 @@ public class UINavigation : MonoBehaviour
         LoadSaveCanvas.enabled = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ClickBtn()
     {
         StartingCanvas.enabled = false;
