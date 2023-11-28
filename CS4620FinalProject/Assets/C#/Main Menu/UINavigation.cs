@@ -10,6 +10,7 @@ public class UINavigation : MonoBehaviour
     public Canvas SelectionCanvas;
     public Canvas NewGameCanvas;
     public Canvas LoadSaveCanvas;
+    public Canvas SettingsCanvas;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,7 @@ public class UINavigation : MonoBehaviour
         SelectionCanvas.enabled = false;
         NewGameCanvas.enabled = false;
         LoadSaveCanvas.enabled = false;
+        SettingsCanvas.enabled = false;
     }
 
     public void ClickBtn()
@@ -31,6 +33,7 @@ public class UINavigation : MonoBehaviour
         SelectionCanvas.enabled = true;
         NewGameCanvas.enabled = false;
         LoadSaveCanvas.enabled = false;
+        SettingsCanvas.enabled = false;
     }
 
     public void NewGameBtn()
@@ -43,5 +46,16 @@ public class UINavigation : MonoBehaviour
     {
         SelectionCanvas.enabled = false;
         LoadSaveCanvas.enabled = true;
+    }
+
+    public void SettingsBtn()
+    {
+        SelectionCanvas.enabled = false;
+        SettingsCanvas.enabled = true;
+    }
+
+    public void ExitGameBtn()
+    {
+        Application.Quit();
     }
 }
