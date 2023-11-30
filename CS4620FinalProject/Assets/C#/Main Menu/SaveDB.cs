@@ -5,6 +5,9 @@ using System.Data;
 using Mono.Data.Sqlite;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using System.IO;
+using UnityEngine.SceneManagement;
 
 
 public class SaveDB : MonoBehaviour
@@ -25,8 +28,8 @@ public class SaveDB : MonoBehaviour
         if (CheckInput())
         {
             DbCommand("INSERT INTO SAVENAMES VALUES('" + saveName.text + "')");
-            Debug.Log(saveName.text);
-        }
+            SceneManager.LoadScene("Map");
+        } 
     }
 
     bool CheckInput()
@@ -94,5 +97,10 @@ public class SaveDB : MonoBehaviour
         dataReader.Close();
         dbConnection.Close();
         return false;
+    }
+
+    public void DBDelete()
+    {
+        File.Delete(dbName);
     }
 }
