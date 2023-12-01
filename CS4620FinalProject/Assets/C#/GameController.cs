@@ -51,16 +51,16 @@ public class GameController : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         
         }
-       /* 
-        if(Input.GetMouseButtonDown(0)){
+        
+      /*  if(Input.GetMouseButtonDown(0)){
             anim.SetBool("swing", true);
         }else{
             anim.SetBool("swing", false);
-        }
+        }*/
 
         
         anim.SetFloat("forward", z);
-        anim.SetFloat("strafe", x);*/
+        //anim.SetFloat("strafe", x);
 
         
 
