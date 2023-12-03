@@ -10,6 +10,8 @@ public class Calender : MonoBehaviour
     public Canvas calenderCanvas;
     public Canvas dayCanvas;
 
+    public GameObject Days;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,22 @@ public class Calender : MonoBehaviour
             mapChoices.enabled = false;
             calenderCanvas.enabled = true;
             dayCanvas.enabled = false;
+            NumberButtons();
+        }
+    }
+
+    private void NumberButtons()
+    {
+        Transform current = Days.transform.Find("Day");
+        current = current.Find("Number");
+        TMP_Text number = current.GetComponent<TMP_Text>();
+        number.text = "1";
+        for (int i = 1; i < 42; i++)
+        {
+            current = Days.transform.Find("Day ("+ i +")");
+            current = current.Find("Number");
+            number = current.GetComponent<TMP_Text>();
+            number.text = "1";
         }
     }
 }
