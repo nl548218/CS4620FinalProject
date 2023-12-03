@@ -42,10 +42,15 @@ public class SaveDB : MonoBehaviour
             errorTxt.text = "There is a 30 charatcer save limit.";
             return false;
         }
-        //Only letters and numbers
-        for(int i = 0; i < inputTxt.Length; i++)
+        else if (inputTxt == "saves" || inputTxt.Length < 1)
         {
-            if((inputTxt[i] >= 49 && inputTxt[i] <= 57)||(inputTxt[i] >= 65 && inputTxt[i] <= 90) || (inputTxt[i] >= 97 && inputTxt[i] <= 122))
+            errorTxt.text = "It can not be this value.";
+            return false;
+        }
+        //Only letters and numbers
+        for (int i = 0; i < inputTxt.Length; i++)
+        {
+            if((inputTxt[i] >= 48 && inputTxt[i] <= 57)||(inputTxt[i] >= 65 && inputTxt[i] <= 90) || (inputTxt[i] >= 97 && inputTxt[i] <= 122))
             {
 
             }
