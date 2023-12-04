@@ -9,6 +9,7 @@ public class UI_Shop : MonoBehaviour
   private Transform shopItemTemplate;
 
 private void start(){
+    awake();
     Hide(); 
 }
 
