@@ -17,7 +17,8 @@ public class Calender : MonoBehaviour
 
     public TMP_Text MonthName;
 
-    private int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    public static int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    public static string[] dayText = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     private int StartDate;
     private int MonthValue;
     private int Year;
@@ -84,7 +85,7 @@ public class Calender : MonoBehaviour
         int dateValue = 1;
         for (int i = 0; i < 42; i++)
         {
-            if(i >= (StartDate-1) && i <= ((StartDate-2)+daysInMonth[MonthValue-1]))
+            if(i >= (StartDate-1) && i <= ((StartDate-2)+daysInMonth[MonthValue-1]) || (MonthValue == 2 && (Year%4) == 0 && i >= (StartDate - 1) && i <= ((StartDate - 1) + daysInMonth[MonthValue - 1])))
             {
                 Transform current = Days.transform.Find("Day (" + i + ")");
                 Image lighten = current.GetComponent<Image>();

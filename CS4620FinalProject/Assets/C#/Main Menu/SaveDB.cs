@@ -127,12 +127,12 @@ public class SaveDB : MonoBehaviour
         //1-Bills 2-Usermessage
         DbCommand("CREATE TABLE IF NOT EXISTS DAYS (Name VARCHAR(9), Year INT, Message VARCHAR(50), Information INT)", newdbname);
 
-        DbCommand("CREATE TABLE IF NOT EXISTS CURRENTSTAT (Money INT, Year INT, Month VARCHAR(9), Day INT)", newdbname);
+        DbCommand("CREATE TABLE IF NOT EXISTS CURRENTSTAT (Money INT, Year INT, Month VARCHAR(9), MonthNumber INT, Day INT, DayLabel VARCHAR(9))", newdbname);
 
         //Months 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
         DbCommand("INSERT INTO MONTHS VALUES ('January', 2000, 7, 1), ('February', 2000, 3, 2), ('March', 2000, 4, 3), ('April', 2000, 7, 4), ('May', 2000, 2, 5), ('June', 2000, 5, 6), ('July', 2000, 7, 7), ('August', 2000, 3, 8), ('September', 2000, 6, 9), ('October', 2000, 1, 10), ('November', 2000, 4, 11), ('December', 2000, 6, 12)", newdbname);
         DbCommand("INSERT INTO MONTHS VALUES ('January', 2001, 2, 1), ('February', 2001, 5, 2), ('March', 2001, 5, 3), ('April', 2001, 1, 4), ('May', 2001, 3, 5), ('June', 2001, 6, 6), ('July', 2001, 1, 7), ('August', 2001, 4, 8), ('September', 2001, 7, 9), ('October', 2001, 2, 10), ('November', 2001, 5, 11), ('December', 2001, 7, 12)", newdbname);
         //Stats
-        DbCommand("INSERT INTO CURRENTSTAT VALUES (20000, 2000, 'January', 1)", newdbname);
+        DbCommand("INSERT INTO CURRENTSTAT VALUES (20000, 2000, 'January', 1, 1, 'Saturday')", newdbname);
     }
 }
