@@ -14,7 +14,14 @@ public class Calender : MonoBehaviour
     public Canvas mapChoices;
     public Canvas calenderCanvas;
     public Canvas dayCanvas;
+
+    public TMP_Text MonthName;
+
     private int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    private int StartDate;
+    private int MonthValue;
+    private int Year;
+    private string MonthText;
 
     public GameObject Days;
 
@@ -24,6 +31,7 @@ public class Calender : MonoBehaviour
         mapChoices.enabled = true;
         calenderCanvas.enabled = false;
         dayCanvas.enabled = false;
+
     }
 
     // Update is called once per frame
@@ -48,33 +56,39 @@ public class Calender : MonoBehaviour
             mapChoices.enabled = false;
             calenderCanvas.enabled = true;
             dayCanvas.enabled = false;
+            GetCurrentValues();
             NumberButtons();
         }
     }
 
-    private void NumberButtons()
+    private void GetCurrentValues()
     {
         string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
         IDbConnection dbConnection = new SqliteConnection(dbname);
         dbConnection.Open();
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        /*dbCommand.CommandText = "SELECT * FROM CURRENTSTAT";
-        IDataReader dataReader = dbCommand.ExecuteReader();
-        dataReader.Read();
-        string currentMonth = (string)dataReader["Month"];
-        int currentDay = (int)dataReader["Year"];*/
-
         dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE C.Month=M.Name AND C.Year=M.Year";
         IDataReader dataReader = dbCommand.ExecuteReader();
         dataReader.Read();
-        int StartDate = (int)dataReader["StartDate"];
-        int monthNumber = (int)dataReader["MonthNumber"];
+        StartDate = (int)dataReader["StartDate"];
+        MonthValue = (int)dataReader["MonthNumber"];
+        Year = (int)dataReader["Year"];
+        MonthText = (string)dataReader["Name"];
+        dataReader.Close();
+        dbConnection.Close();
+    }
+
+    private void NumberButtons()
+    {
+        MonthName.text = MonthText;
         int dateValue = 1;
         for (int i = 0; i < 42; i++)
         {
-            if(i >= (StartDate-1) && i <= (StartDate+daysInMonth[monthNumber-1]-2))
+            if(i >= (StartDate-1) && i <= ((StartDate-2)+daysInMonth[MonthValue-1]))
             {
                 Transform current = Days.transform.Find("Day (" + i + ")");
+                Image lighten = current.GetComponent<Image>();
+                lighten.color = new Color(1f, 1f, 1f, 1f);
                 current = current.Find("Number");
                 TMP_Text number = current.GetComponent<TMP_Text>();
                 number.text = dateValue.ToString();
@@ -83,12 +97,29 @@ public class Calender : MonoBehaviour
             else
             {
                 Transform current = Days.transform.Find("Day (" + i + ")");
+                Image darken = current.GetComponent<Image>();
+                darken.color = new Color(0.66f, 0.66f, 0.66f, 1f);
                 current = current.Find("Number");
                 TMP_Text number = current.GetComponent<TMP_Text>();
                 number.text = "";
             }
         }
+    }
+    public void RightArrow()
+    {
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE "+(MonthValue+1)+ "=M.MonthNumber AND "+Year+"=M.Year";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        StartDate = (int)dataReader["StartDate"];
+        MonthValue = (int)dataReader["MonthNumber"];
+        Year = (int)dataReader["Year"];
+        MonthText = (string)dataReader["Name"];
         dataReader.Close();
         dbConnection.Close();
+        NumberButtons();
     }
 }
