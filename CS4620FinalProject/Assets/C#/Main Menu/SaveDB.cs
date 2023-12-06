@@ -28,6 +28,7 @@ public class SaveDB : MonoBehaviour
         if (CheckInput())
         {
             DbCommand("INSERT INTO SAVENAMES VALUES('" + saveName.text + "')");
+            BuildNewDB("URI = file:" + saveName.text + ".sqlite");
             SceneManager.LoadScene("Map");
         } 
     }
@@ -83,6 +84,17 @@ public class SaveDB : MonoBehaviour
         dbCommandCreateTable.ExecuteReader();
         dbConnection.Close();
     }
+
+    private void DbCommand(string text, string custumdbname)
+    {
+        IDbConnection dbConnection = new SqliteConnection(custumdbname);
+        dbConnection.Open();
+        IDbCommand dbCommandCreateTable = dbConnection.CreateCommand();
+        dbCommandCreateTable.CommandText = text;
+        dbCommandCreateTable.ExecuteReader();
+        dbConnection.Close();
+    }
+
     bool DbCommandRead(string text)
     {
         IDbConnection dbConnection = new SqliteConnection(dbName);
@@ -107,5 +119,19 @@ public class SaveDB : MonoBehaviour
     public void DBDelete()
     {
         File.Delete(dbName);
+    }
+
+    public void BuildNewDB(string newdbname)
+    {
+        DbCommand("CREATE TABLE IF NOT EXISTS MONTHS (Name VARCHAR(9), Year INT, StartDate INT, EndDate INT, MonthNumber INT)", newdbname);
+        //1-Bills 2-Usermessage
+        DbCommand("CREATE TABLE IF NOT EXISTS DAYS (Name VARCHAR(9), Year INT, Message VARCHAR(50), Information INT)", newdbname);
+
+        DbCommand("CREATE TABLE IF NOT EXISTS CURRENTSTAT (Money INT, Year INT, Month VARCHAR(9), Day INT)", newdbname);
+
+        //Months 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+        DbCommand("INSERT INTO MONTHS VALUES ('January', 2000, 7, 2, 1), ('February', 2000, 3, 3, 2), ('March', 2000, 4, 6, 3), ('April', 2000, 7, 1, 4), ('May', 2000, 2, 4, 5), ('June', 2000, 5, 6, 6), ('July', 2000, 7, 2, 7), ('August', 2000, 3, 5, 8), ('September', 2000, 6, 7, 9), ('October', 2000, 1, 3, 10), ('November', 2000, 4, 5, 11), ('December', 2000, 6, 1, 12)", newdbname);
+        //Stats
+        DbCommand("INSERT INTO CURRENTSTAT VALUES (20000, 2000, 'January', 1)", newdbname);
     }
 }

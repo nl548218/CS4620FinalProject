@@ -1,14 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Data;
+using Mono.Data.Sqlite;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using System.IO;
+using UnityEngine.SceneManagement;
 
 public class Calender : MonoBehaviour
 {
     public Canvas mapChoices;
     public Canvas calenderCanvas;
     public Canvas dayCanvas;
+    private int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
     public GameObject Days;
 
@@ -48,16 +54,41 @@ public class Calender : MonoBehaviour
 
     private void NumberButtons()
     {
-        Transform current = Days.transform.Find("Day");
-        current = current.Find("Number");
-        TMP_Text number = current.GetComponent<TMP_Text>();
-        number.text = "1";
-        for (int i = 1; i < 42; i++)
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        /*dbCommand.CommandText = "SELECT * FROM CURRENTSTAT";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        string currentMonth = (string)dataReader["Month"];
+        int currentDay = (int)dataReader["Year"];*/
+
+        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE C.Month=M.Name AND C.Year=M.Year";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        int StartDate = (int)dataReader["StartDate"];
+        int monthNumber = (int)dataReader["MonthNumber"];
+        int dateValue = 1;
+        for (int i = 0; i < 42; i++)
         {
-            current = Days.transform.Find("Day ("+ i +")");
-            current = current.Find("Number");
-            number = current.GetComponent<TMP_Text>();
-            number.text = "1";
+            if(i >= (StartDate-1) && i <= (StartDate+daysInMonth[monthNumber-1]-2))
+            {
+                Transform current = Days.transform.Find("Day (" + i + ")");
+                current = current.Find("Number");
+                TMP_Text number = current.GetComponent<TMP_Text>();
+                number.text = dateValue.ToString();
+                dateValue++;
+            }
+            else
+            {
+                Transform current = Days.transform.Find("Day (" + i + ")");
+                current = current.Find("Number");
+                TMP_Text number = current.GetComponent<TMP_Text>();
+                number.text = "";
+            }
         }
+        dataReader.Close();
+        dbConnection.Close();
     }
 }

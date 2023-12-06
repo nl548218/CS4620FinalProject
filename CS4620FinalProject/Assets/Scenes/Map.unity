@@ -6640,7 +6640,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.78666383}
   m_AnchorMax: {x: 0.24775001, y: 1}
-  m_AnchoredPosition: {x: -31.22586, y: 14.185486}
+  m_AnchoredPosition: {x: -31.22583, y: 14.185486}
   m_SizeDelta: {x: -62.4515, y: -28.3708}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &921552530
@@ -13079,7 +13079,7 @@ GameObject:
   - component: {fileID: 1569625576}
   - component: {fileID: 1569625578}
   m_Layer: 5
-  m_Name: Day
+  m_Name: Day (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

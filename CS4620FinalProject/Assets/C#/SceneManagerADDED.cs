@@ -6,7 +6,7 @@ using TMPro;
 
 public class SceneManagerADDED : MonoBehaviour
 {
-    private static string PlayerName = "";
+    public static string PlayerName = "";
 
     // Start is called before the first frame update
     void Start()
