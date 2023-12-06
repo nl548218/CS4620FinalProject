@@ -80,7 +80,7 @@ public class Calender : MonoBehaviour
 
     private void NumberButtons()
     {
-        MonthName.text = MonthText;
+        MonthName.text = MonthText + " " + Year;
         int dateValue = 1;
         for (int i = 0; i < 42; i++)
         {
@@ -120,9 +120,22 @@ public class Calender : MonoBehaviour
         IDbConnection dbConnection = new SqliteConnection(dbname);
         dbConnection.Open();
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE "+MonthValue+ "=M.MonthNumber AND "+Year+"=M.Year";
+        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE "+ MonthValue+ "=M.MonthNumber AND "+Year+"=M.Year";
         IDataReader dataReader = dbCommand.ExecuteReader();
-        dataReader.Read();
+        if (!dataReader.Read())
+        {
+            //Undo
+            if (MonthValue == 1)
+            {
+                MonthValue = 12;
+                Year--;
+            }
+            else
+            {
+                MonthValue--;
+            }
+            return;
+        }
         StartDate = (int)dataReader["StartDate"];
         MonthValue = (int)dataReader["MonthNumber"];
         Year = (int)dataReader["Year"];
@@ -134,6 +147,10 @@ public class Calender : MonoBehaviour
 
     public void LeftArrow()
     {
+        if(MonthValue == 1 && Year == 2000)
+        {
+            return;
+        }
         if (MonthValue == 1)
         {
             MonthValue = 12;
