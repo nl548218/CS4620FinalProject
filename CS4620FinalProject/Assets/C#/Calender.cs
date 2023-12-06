@@ -107,11 +107,47 @@ public class Calender : MonoBehaviour
     }
     public void RightArrow()
     {
+        if(MonthValue == 12)
+        {
+            MonthValue = 1;
+            Year++;
+        }
+        else
+        {
+            MonthValue++;
+        }
         string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
         IDbConnection dbConnection = new SqliteConnection(dbname);
         dbConnection.Open();
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE "+(MonthValue+1)+ "=M.MonthNumber AND "+Year+"=M.Year";
+        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE "+MonthValue+ "=M.MonthNumber AND "+Year+"=M.Year";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        StartDate = (int)dataReader["StartDate"];
+        MonthValue = (int)dataReader["MonthNumber"];
+        Year = (int)dataReader["Year"];
+        MonthText = (string)dataReader["Name"];
+        dataReader.Close();
+        dbConnection.Close();
+        NumberButtons();
+    }
+
+    public void LeftArrow()
+    {
+        if (MonthValue == 1)
+        {
+            MonthValue = 12;
+            Year--;
+        }
+        else
+        {
+            MonthValue--;
+        }
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE " + MonthValue + "=M.MonthNumber AND " + Year + "=M.Year";
         IDataReader dataReader = dbCommand.ExecuteReader();
         dataReader.Read();
         StartDate = (int)dataReader["StartDate"];
