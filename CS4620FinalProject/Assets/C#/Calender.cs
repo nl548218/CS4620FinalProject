@@ -16,12 +16,15 @@ public class Calender : MonoBehaviour
     public Canvas dayCanvas;
 
     public TMP_Text MonthName;
+    public TMP_Text DayTxt;
 
     public static int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     public static string[] dayText = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     private int StartDate;
     private int currentDay;
+    private int currentMonth;
     private int MonthValue;
+    private int currentYear;
     private int Year;
     private string MonthText;
 
@@ -63,6 +66,26 @@ public class Calender : MonoBehaviour
         }
     }
 
+    public void OpenDay(TMP_Text Day)
+    {
+        mapChoices.enabled = false;
+        calenderCanvas.enabled = false;
+        dayCanvas.enabled = true;
+        if (Day.text == "")
+        {
+
+        }
+        else
+        {
+            DayTxt.text = MonthText + " " + Day.text + ", " + Year;
+        }
+    }
+
+    public void ReturnBtn()
+    {
+        OpenCalender();
+    }
+
     private void GetCurrentValues()
     {
         string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
@@ -75,7 +98,9 @@ public class Calender : MonoBehaviour
         StartDate = (int)dataReader["StartDate"];
         currentDay = (int)dataReader["Day"];
         MonthValue = (int)dataReader["MonthNumber"];
+        currentMonth = MonthValue;
         Year = (int)dataReader["Year"];
+        currentYear = Year;
         MonthText = (string)dataReader["Name"];
         dataReader.Close();
         dbConnection.Close();
@@ -91,7 +116,7 @@ public class Calender : MonoBehaviour
             {
                 Transform current = Days.transform.Find("Day (" + i + ")");
                 Image lighten = current.GetComponent<Image>();
-                if(currentDay == dateValue)
+                if(currentDay == dateValue && currentMonth == MonthValue && currentYear == Year)
                 {
                     lighten.color = new Color(0f, 0f, 1f, 1f);
                 }
