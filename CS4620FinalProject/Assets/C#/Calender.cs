@@ -20,6 +20,7 @@ public class Calender : MonoBehaviour
     public static int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     public static string[] dayText = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
     private int StartDate;
+    private int currentDay;
     private int MonthValue;
     private int Year;
     private string MonthText;
@@ -68,10 +69,11 @@ public class Calender : MonoBehaviour
         IDbConnection dbConnection = new SqliteConnection(dbname);
         dbConnection.Open();
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE C.Month=M.Name AND C.Year=M.Year";
+        dbCommand.CommandText = "SELECT * FROM MONTHS M, CURRENTSTAT C WHERE C.MonthNumber=M.MonthNumber AND C.Year=M.Year";
         IDataReader dataReader = dbCommand.ExecuteReader();
         dataReader.Read();
         StartDate = (int)dataReader["StartDate"];
+        currentDay = (int)dataReader["Day"];
         MonthValue = (int)dataReader["MonthNumber"];
         Year = (int)dataReader["Year"];
         MonthText = (string)dataReader["Name"];
@@ -89,7 +91,14 @@ public class Calender : MonoBehaviour
             {
                 Transform current = Days.transform.Find("Day (" + i + ")");
                 Image lighten = current.GetComponent<Image>();
-                lighten.color = new Color(1f, 1f, 1f, 1f);
+                if(currentDay == dateValue)
+                {
+                    lighten.color = new Color(0f, 0f, 1f, 1f);
+                }
+                else
+                {
+                    lighten.color = new Color(1f, 1f, 1f, 1f);
+                }
                 current = current.Find("Number");
                 TMP_Text number = current.GetComponent<TMP_Text>();
                 number.text = dateValue.ToString();

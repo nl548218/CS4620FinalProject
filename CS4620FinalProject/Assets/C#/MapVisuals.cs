@@ -78,6 +78,49 @@ public class MapVisuals : MonoBehaviour
         dbConnection.Close();
     }
 
+    public void AddYear()
+    {
+        dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT MAX(Year) AS MaxYear FROM MONTHS";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        int lastYear = Convert.ToInt32(dataReader["MaxYear"]);
+        //New Command
+        dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT StartDate FROM MONTHS WHERE Year = '" + lastYear + "' AND MonthNumber = 12";
+        dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        int startOfDecember = (int)dataReader["StartDate"];
+
+        dbCommand = dbConnection.CreateCommand();
+        int[] startDays = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        startDays[0] = (startOfDecember + Calender.daysInMonth[11]) % 7;
+        if(startDays[0] == 0)
+        {
+            startDays[0] = 7;
+        }
+        for(int i = 1; i < 12; i++)
+        {
+            startDays[i] = (startDays[i-1] + Calender.daysInMonth[i-1]) % 7;
+            if (startDays[i] == 0)
+            {
+                startDays[i] = 7;
+            }
+        }
+        dbCommand.CommandText = "INSERT INTO MONTHS VALUES('January', " + (lastYear + 1) + ", " + startDays[0] + ", 1), ('February', " + (lastYear + 1) + ", " + startDays[1] + ", 2), ('March', " + (lastYear + 1) + ", " + startDays[2] + ", 3), ('April', " + (lastYear + 1) + ", " + startDays[3] + ", 4), ('May', " + (lastYear + 1) + ", " + startDays[4] + ", 5), ('June', " + (lastYear + 1) + ", " + startDays[5] + ", 6), ('July', " + (lastYear + 1) + ", " + startDays[6] + ", 7), ('August', " + (lastYear + 1) + ", " + startDays[7] + ", 8), ('September', " + (lastYear + 1) + ", " + startDays[8] + ", 9), ('October', " + (lastYear + 1) + ", " + startDays[9] + ", 10), ('November', " + (lastYear + 1) + ", " + startDays[10] + ", 11), ('December', " + (lastYear + 1) + ", " + startDays[11] + ", 12)";
+        dataReader = dbCommand.ExecuteReader();
+
+        //Close
+        dataReader.Close();
+        dbConnection.Close();
+
+
+
+    }
+
     public void NextDay()
     {
         int Day = DataBaseGrabInt("Day");
@@ -128,6 +171,10 @@ public class MapVisuals : MonoBehaviour
                     i = 9; // end
                 }
             }
+        }
+        if(MonthNumber == 6 && Day == 1)
+        {
+            AddYear();
         }
         DataBaseUpdate("Day", Day.ToString());
         DataBaseUpdate("MonthNumber", MonthNumber.ToString());
