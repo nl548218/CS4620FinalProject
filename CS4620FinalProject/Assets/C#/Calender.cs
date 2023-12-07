@@ -17,6 +17,10 @@ public class Calender : MonoBehaviour
 
     public TMP_Text MonthName;
     public TMP_Text DayTxt;
+    public TMP_Text message;
+
+    private string Message;
+    private string dayMessage;
 
     public static int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     public static string[] dayText = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
@@ -77,8 +81,28 @@ public class Calender : MonoBehaviour
         }
         else
         {
-            DayTxt.text = MonthText + " " + Day.text + ", " + Year;
+            dayMessage = MonthText + " " + Day.text + ", " + Year;
+            DayTxt.text = dayMessage;
+            GrabMessageStart();
         }
+    }
+
+    private void GrabMessageStart()
+    {
+        Message = "";
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM DAYS WHERE OverallDate = '" + dayMessage + "'";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        if (dataReader.Read())
+        {
+            Message = (string)dataReader["Message"];
+        }
+        message.text = Message;
+        dataReader.Close();
+        dbConnection.Close();
     }
 
     public void ReturnBtn()

@@ -125,7 +125,7 @@ public class SaveDB : MonoBehaviour
     {
         DbCommand("CREATE TABLE IF NOT EXISTS MONTHS (Name VARCHAR(9), Year INT, StartDate INT, MonthNumber INT)", newdbname);
         //1-Bills 2-Usermessage
-        DbCommand("CREATE TABLE IF NOT EXISTS DAYS (Name VARCHAR(9), Year INT, Message VARCHAR(50), Information INT)", newdbname);
+        DbCommand("CREATE TABLE IF NOT EXISTS DAYS (OverallDate VARCHAR(50), Message VARCHAR(100), Information INT)", newdbname);
 
         DbCommand("CREATE TABLE IF NOT EXISTS CURRENTSTAT (Money INT, Year INT, Month VARCHAR(9), MonthNumber INT, Day INT, DayLabel VARCHAR(9))", newdbname);
 
