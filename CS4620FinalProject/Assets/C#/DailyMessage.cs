@@ -93,7 +93,7 @@ public class DailyMessage : MonoBehaviour
         //Only letters and numbers
         for (int i = 0; i < inputTxt.Length; i++)
         {
-            if ((inputTxt[i] >= 48 && inputTxt[i] <= 57) || (inputTxt[i] >= 65 && inputTxt[i] <= 90) || (inputTxt[i] >= 97 && inputTxt[i] <= 122))
+            if ((inputTxt[i] >= 48 && inputTxt[i] <= 57) || (inputTxt[i] >= 65 && inputTxt[i] <= 90) || (inputTxt[i] >= 97 && inputTxt[i] <= 122) || (inputTxt[i] == 32 || inputTxt[i] == 46))
             {
 
             }

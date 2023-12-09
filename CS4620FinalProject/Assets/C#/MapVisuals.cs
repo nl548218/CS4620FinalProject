@@ -12,6 +12,8 @@ public class MapVisuals : MonoBehaviour
 {
     public TMP_Text moneyTxt;
     public TMP_Text currentDateTxt;
+    public Image messageDisplay;
+    public TMP_Text messageTxt;
     string dbname;
 
 
@@ -21,6 +23,7 @@ public class MapVisuals : MonoBehaviour
         UpdateDbMoney(-5000);
         UpdateMoney();
         UpdateDate();
+        UpdateMessage();
     }
 
     // Update is called once per frame
@@ -32,6 +35,34 @@ public class MapVisuals : MonoBehaviour
     private void UpdateMoney()
     {
         moneyTxt.text = "$" + DataBaseGrabInt("Money");
+    }
+
+    private void UpdateMessage()
+    {
+        string OverallDate = DataBaseGrab("Month") + " " + DataBaseGrabInt("Day") + ", " + DataBaseGrabInt("Year");
+        dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM DAYS";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            string grabbedValue = (string)dataReader["OverallDate"];
+            if(OverallDate == grabbedValue)
+            {
+                messageDisplay.enabled = true;
+                messageTxt.enabled = true;
+                messageTxt.text = (string)dataReader["Message"];
+                dataReader.Close();
+                dbConnection.Close();
+                return;
+            }
+        }
+        dataReader.Close();
+        dbConnection.Close();
+        messageDisplay.enabled = false;
+        messageTxt.enabled = false;
     }
 
     //Negative changeValue decreases money
@@ -209,5 +240,6 @@ public class MapVisuals : MonoBehaviour
         //Non-numeric changes
         UpdateMoney();
         UpdateDate();
+        UpdateMessage();
     }
 }
