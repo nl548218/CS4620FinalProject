@@ -51,12 +51,15 @@ public class MapVisuals : MonoBehaviour
             string grabbedValue = (string)dataReader["OverallDate"];
             if(OverallDate == grabbedValue)
             {
-                messageDisplay.enabled = true;
-                messageTxt.enabled = true;
-                messageTxt.text = (string)dataReader["Message"];
-                dataReader.Close();
-                dbConnection.Close();
-                return;
+                if((int)dataReader["Information"] == 2)
+                {
+                    messageDisplay.enabled = true;
+                    messageTxt.enabled = true;
+                    messageTxt.text = (string)dataReader["Message"];
+                    dataReader.Close();
+                    dbConnection.Close();
+                    return;
+                }
             }
         }
         dataReader.Close();
@@ -173,9 +176,41 @@ public class MapVisuals : MonoBehaviour
         //Close
         dataReader.Close();
         dbConnection.Close();
+    }
 
+    private void CheckForBills()
+    {
+        int grabbedValue = 0;
+        string OverallDate = DataBaseGrab("Month") + " " + DataBaseGrabInt("Day") + ", " + DataBaseGrabInt("Year");
+        dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM DAYS";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            if((string)dataReader["OverallDate"] == OverallDate && (int)dataReader["Information"] == 1)
+            {
+                grabbedValue = Convert.ToInt32(dataReader["Message"]);
+            }
+        }
 
-
+        if(grabbedValue != 0)
+        {
+            dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "SELECT * FROM CURRENTSTAT";
+            dataReader = dbCommand.ExecuteReader();
+            dataReader.Read();
+            grabbedValue = grabbedValue + Convert.ToInt32(dataReader["Money"]);
+            //Update
+            dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "UPDATE CURRENTSTAT SET Money = '" + grabbedValue + "'";
+            dataReader = dbCommand.ExecuteReader();
+        }
+        //Close
+        dataReader.Close();
+        dbConnection.Close();
     }
 
     public void NextDay()
@@ -237,6 +272,7 @@ public class MapVisuals : MonoBehaviour
         DataBaseUpdate("MonthNumber", MonthNumber.ToString());
         DataBaseUpdate("Year", Year.ToString());
         DataBaseUpdate("DayLabel", DayLabel);
+        CheckForBills();
         //Non-numeric changes
         UpdateMoney();
         UpdateDate();

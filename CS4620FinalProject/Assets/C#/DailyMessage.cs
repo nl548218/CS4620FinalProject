@@ -38,9 +38,12 @@ public class DailyMessage : MonoBehaviour
         IDbCommand dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = "SELECT * FROM DAYS WHERE OverallDate = '" + OverallDate.text + "'";
         IDataReader dataReader = dbCommand.ExecuteReader();
-        if (dataReader.Read())
+        while (dataReader.Read())
         {
-            Message = (string)dataReader["Message"];
+            if ((int)dataReader["Information"] == 2)
+            {
+                Message = (string)dataReader["Message"];
+            }
         }
         messageTxt.text = Message;
         dataReader.Close();

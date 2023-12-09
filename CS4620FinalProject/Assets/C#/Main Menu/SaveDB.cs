@@ -134,5 +134,8 @@ public class SaveDB : MonoBehaviour
         DbCommand("INSERT INTO MONTHS VALUES ('January', 2001, 2, 1), ('February', 2001, 5, 2), ('March', 2001, 5, 3), ('April', 2001, 1, 4), ('May', 2001, 3, 5), ('June', 2001, 6, 6), ('July', 2001, 1, 7), ('August', 2001, 4, 8), ('September', 2001, 7, 9), ('October', 2001, 2, 10), ('November', 2001, 5, 11), ('December', 2001, 7, 12)", newdbname);
         //Stats
         DbCommand("INSERT INTO CURRENTSTAT VALUES (20000, 2000, 'January', 1, 1, 'Saturday')", newdbname);
+
+        //Test Bill
+        //DbCommand("INSERT INTO DAYS VALUES ('January 31, 2000', '-2000', 1)", newdbname);
     }
 }
