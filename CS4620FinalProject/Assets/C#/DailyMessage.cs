@@ -49,6 +49,10 @@ public class DailyMessage : MonoBehaviour
 
     public void PlaceMessage()
     {
+        if(!CheckInput())
+        {
+            return;
+        }
         string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
         IDbConnection dbConnection = new SqliteConnection(dbname);
         dbConnection.Open();
@@ -74,5 +78,31 @@ public class DailyMessage : MonoBehaviour
         }
         dataReader.Close();
         dbConnection.Close();
+    }
+
+    bool CheckInput()
+    {
+        messageTxt.text = "";
+        string inputTxt = newMessage.text;
+        //Inside max length
+        if (inputTxt.Length > 100)
+        {
+            messageTxt.text = "There is a 100 charatcer save limit.";
+            return false;
+        }
+        //Only letters and numbers
+        for (int i = 0; i < inputTxt.Length; i++)
+        {
+            if ((inputTxt[i] >= 48 && inputTxt[i] <= 57) || (inputTxt[i] >= 65 && inputTxt[i] <= 90) || (inputTxt[i] >= 97 && inputTxt[i] <= 122))
+            {
+
+            }
+            else
+            {
+                messageTxt.text = "There can only be standard letters and numbers.";
+                return false;
+            }
+        }
+        return true;
     }
 }
