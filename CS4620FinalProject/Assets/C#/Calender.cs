@@ -144,6 +144,10 @@ public class Calender : MonoBehaviour
                 {
                     lighten.color = new Color(0f, 0f, 1f, 1f);
                 }
+                else if(HasMessage(MonthText + " " + dateValue + ", " + Year))
+                {
+                    lighten.color = new Color(0f, 1f, 0f, 1f);
+                }
                 else
                 {
                     lighten.color = new Color(1f, 1f, 1f, 1f);
@@ -233,5 +237,26 @@ public class Calender : MonoBehaviour
         dataReader.Close();
         dbConnection.Close();
         NumberButtons();
+    }
+
+    private bool HasMessage(string DateCollection)
+    {
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM DAYS";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            string OverallDate = (string)dataReader["OverallDate"];
+            if (OverallDate == DateCollection)
+            {
+                return true;
+            }
+        }
+        dataReader.Close();
+        dbConnection.Close();
+        return false;
     }
 }
