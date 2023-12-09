@@ -18,6 +18,7 @@ public class MapVisuals : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UpdateDbMoney(-5000);
         UpdateMoney();
         UpdateDate();
     }
@@ -31,6 +32,31 @@ public class MapVisuals : MonoBehaviour
     private void UpdateMoney()
     {
         moneyTxt.text = "$" + DataBaseGrabInt("Money");
+    }
+
+    //Negative changeValue decreases money
+    public void UpdateDbMoney(int changeValue)
+    {
+        //Get Current Value 
+        dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM CURRENTSTAT";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        int grabbedValue = (int)dataReader["Money"];
+        dataReader.Close();
+        dbConnection.Close();
+        //Increase by amount
+        grabbedValue = grabbedValue + changeValue;
+        dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "UPDATE CURRENTSTAT SET Money = " + grabbedValue;
+        dataReader = dbCommand.ExecuteReader();
+        dataReader.Close();
+        dbConnection.Close();
     }
 
     private void UpdateDate()
