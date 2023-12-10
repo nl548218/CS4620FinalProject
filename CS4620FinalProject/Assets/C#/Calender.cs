@@ -20,6 +20,10 @@ public class Calender : MonoBehaviour
     public TMP_Text DayTxt;
     public TMP_Text message;
     public TMP_Text location;
+    public TMP_Text priceValue;
+    public TMP_Text priceOrSold;
+    public TMP_Text buyTxt;
+    public Button buyBtn;
 
     private string Message;
     private string dayMessage;
@@ -59,6 +63,107 @@ public class Calender : MonoBehaviour
     {
         buyCanvas.enabled = true;
         location.text = locationName;
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM AVAILABLEBUILDINGS WHERE Name = '" + locationName + "'";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        int cost;
+        if (dataReader.Read())
+        {
+            cost = (int)dataReader["Cost"];
+            priceOrSold.text = "Price: ";
+            priceValue.enabled = true;
+            priceValue.text = cost.ToString();
+            buyBtn.enabled = true;
+            buyTxt.enabled = true;
+        }
+        else
+        {
+            cost = 0;
+            priceOrSold.text = "Sold ";
+            priceValue.enabled = false;
+            buyBtn.enabled = false;
+            buyTxt.enabled = false;
+        }
+        dataReader.Close();
+        dbConnection.Close();
+    }
+
+    public void BuyBtn()
+    {
+        int cost = Convert.ToInt32(priceValue.text);
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM CURRENTSTAT";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        if (cost <= (int)dataReader["Money"])
+        {
+            dataReader.Close();
+            dbConnection.Close();
+            PurchaseLocation();
+            UpdateDbMoney(-cost);
+            locationBtn(location.text);
+            Debug.Log("Good");
+        }
+        else
+        {
+            dataReader.Close();
+            dbConnection.Close();
+        }
+    }
+
+    private void PurchaseLocation()
+    {
+        //Find the Amount
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM AVAILABLEBUILDINGS WHERE Name = '" + location.text + "'";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        int temp = (int)dataReader["VendingAmount"];
+        //Add new Purchade
+        dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "INSERT INTO OWNEDBUILDINGS VALUES (" + priceValue.text + ", '" + location.text + "', " + temp.ToString() + ")";
+        dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        //Remove Avalible
+        dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "DELETE FROM AVAILABLEBUILDINGS WHERE Name = '" + location.text + "'";
+        dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        dataReader.Close();
+        dbConnection.Close();
+    }
+
+    public void UpdateDbMoney(int changeValue)
+    {
+        //Get Current Value 
+        string dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT * FROM CURRENTSTAT";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        dataReader.Read();
+        int grabbedValue = (int)dataReader["Money"];
+        dataReader.Close();
+        dbConnection.Close();
+        //Increase by amount
+        grabbedValue = grabbedValue + changeValue;
+        dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "UPDATE CURRENTSTAT SET Money = " + grabbedValue;
+        dataReader = dbCommand.ExecuteReader();
+        dataReader.Close();
+        dbConnection.Close();
     }
 
     public void enterBtn()

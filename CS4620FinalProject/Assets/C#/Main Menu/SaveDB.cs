@@ -129,6 +129,10 @@ public class SaveDB : MonoBehaviour
 
         DbCommand("CREATE TABLE IF NOT EXISTS CURRENTSTAT (Money INT, Year INT, Month VARCHAR(9), MonthNumber INT, Day INT, DayLabel VARCHAR(9))", newdbname);
 
+        DbCommand("CREATE TABLE IF NOT EXISTS AVAILABLEBUILDINGS (Cost INT, Name VARCHAR(20), VendingAmount INT)", newdbname);
+
+        DbCommand("CREATE TABLE IF NOT EXISTS OWNEDBUILDINGS (Cost INT, Name VARCHAR(20), VendingAmount INT)", newdbname);
+
         //Months 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
         DbCommand("INSERT INTO MONTHS VALUES ('January', 2000, 7, 1), ('February', 2000, 3, 2), ('March', 2000, 4, 3), ('April', 2000, 7, 4), ('May', 2000, 2, 5), ('June', 2000, 5, 6), ('July', 2000, 7, 7), ('August', 2000, 3, 8), ('September', 2000, 6, 9), ('October', 2000, 1, 10), ('November', 2000, 4, 11), ('December', 2000, 6, 12)", newdbname);
         DbCommand("INSERT INTO MONTHS VALUES ('January', 2001, 2, 1), ('February', 2001, 5, 2), ('March', 2001, 5, 3), ('April', 2001, 1, 4), ('May', 2001, 3, 5), ('June', 2001, 6, 6), ('July', 2001, 1, 7), ('August', 2001, 4, 8), ('September', 2001, 7, 9), ('October', 2001, 2, 10), ('November', 2001, 5, 11), ('December', 2001, 7, 12)", newdbname);
@@ -137,5 +141,19 @@ public class SaveDB : MonoBehaviour
 
         //Test Bill
         //DbCommand("INSERT INTO DAYS VALUES ('January 31, 2000', '-2000', 1)", newdbname);
+
+        // Red 3 vending machines
+        DbCommand("INSERT INTO AVAILABLEBUILDINGS VALUES (5000, 'Red', 3)", newdbname);
+        // Yellow 6 vending machines
+        DbCommand("INSERT INTO AVAILABLEBUILDINGS VALUES (10000, 'Yellow', 6)", newdbname);
+        // Orange 9 vending machines 
+        DbCommand("INSERT INTO AVAILABLEBUILDINGS VALUES (15000, 'Orange', 9)", newdbname);
+        // Blue 12 vending machines
+        DbCommand("INSERT INTO AVAILABLEBUILDINGS VALUES (20000, 'Blue', 12)", newdbname);
+        // Green 15 vending machines
+        DbCommand("INSERT INTO AVAILABLEBUILDINGS VALUES (25000, 'Green', 15)", newdbname);
+        // Purple 18 vending machines
+        DbCommand("INSERT INTO AVAILABLEBUILDINGS VALUES (30000, 'Purple', 18)", newdbname);
+
     }
 }
