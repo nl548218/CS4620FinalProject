@@ -13,6 +13,7 @@ public class UI_appear : MonoBehaviour
 [SerializeField] private Image customImage1; 
 void start(){
 customImage.enabled = false; 
+
 }
 
 void OnTriggerEnter(Collider other){

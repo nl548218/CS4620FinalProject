@@ -40,12 +40,12 @@ public class MapVisuals : MonoBehaviour
         clicker.SetActive(true); 
     }
 
-    public void buying(){
-        if(vending == false){
-        vending = true; 
-             UpdateDbMoney(-2000); 
-        }
-    }
+// Red 3 vending machines
+// yellow 6 vending machines
+// Orange 9 vending machines 
+// Blue 12 vending machine s
+// Green 15 vending machines
+// Purple 18 vending machines
 
     public void vendingMachine(){
        
