@@ -48,11 +48,10 @@ public class MapVisuals : MonoBehaviour
 // Purple 18 vending machines
 
     public void vendingMachine(){
-       
-        if(vending == true){
+        //if(vending == true){
         int randy = Range(400, 600);
         UpdateDbMoney(randy);
-        }
+        //}
     }
 
     public void moneyLoss(int payment){
@@ -241,6 +240,28 @@ public class MapVisuals : MonoBehaviour
         dbConnection.Close();
     }
 
+    private void moneyMade()
+    {
+        dbname = "URI = file:" + SceneManagerADDED.PlayerName + ".sqlite";
+        IDbConnection dbConnection = new SqliteConnection(dbname);
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT SUM(VendingAmount) AS VM FROM OWNEDBUILDINGS";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        if (dataReader.Read())
+        {
+            int totalVending = Convert.ToInt32(dataReader["VM"]);
+            //Close
+            dataReader.Close();
+            dbConnection.Close();
+            for (int i = 0; i < totalVending; i++)
+            {
+                vendingMachine();
+            }
+        }
+       
+    }
+
     public void NextDay()
     {
         int Day = DataBaseGrabInt("Day");
@@ -300,6 +321,7 @@ public class MapVisuals : MonoBehaviour
         DataBaseUpdate("MonthNumber", MonthNumber.ToString());
         DataBaseUpdate("Year", Year.ToString());
         DataBaseUpdate("DayLabel", DayLabel);
+        moneyMade();
         CheckForBills();
         //Non-numeric changes
         UpdateMoney();

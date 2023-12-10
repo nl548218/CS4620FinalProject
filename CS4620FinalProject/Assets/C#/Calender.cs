@@ -108,7 +108,6 @@ public class Calender : MonoBehaviour
             PurchaseLocation();
             UpdateDbMoney(-cost);
             locationBtn(location.text);
-            Debug.Log("Good");
         }
         else
         {

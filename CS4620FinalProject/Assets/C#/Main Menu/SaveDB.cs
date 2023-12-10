@@ -155,5 +155,7 @@ public class SaveDB : MonoBehaviour
         // Purple 18 vending machines
         DbCommand("INSERT INTO AVAILABLEBUILDINGS VALUES (30000, 'Purple', 18)", newdbname);
 
+        DbCommand("INSERT INTO OWNEDBUILDINGS VALUES (0, 'PlaceHolder', 0)", newdbname);
+
     }
 }
