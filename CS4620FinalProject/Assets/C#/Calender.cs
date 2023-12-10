@@ -14,10 +14,12 @@ public class Calender : MonoBehaviour
     public Canvas mapChoices;
     public Canvas calenderCanvas;
     public Canvas dayCanvas;
+    public Canvas buyCanvas;
 
     public TMP_Text MonthName;
     public TMP_Text DayTxt;
     public TMP_Text message;
+    public TMP_Text location;
 
     private string Message;
     private string dayMessage;
@@ -40,6 +42,7 @@ public class Calender : MonoBehaviour
         mapChoices.enabled = true;
         calenderCanvas.enabled = false;
         dayCanvas.enabled = false;
+        buyCanvas.enabled = false;
 
     }
 
@@ -52,6 +55,17 @@ public class Calender : MonoBehaviour
         }
     }
 
+    public void locationBtn(string locationName)
+    {
+        buyCanvas.enabled = true;
+        location.text = locationName;
+    }
+
+    public void enterBtn()
+    {
+        SceneManager.LoadScene(location.text);
+    }
+
     private void OpenCalender()
     {
         if (calenderCanvas.enabled)
@@ -59,12 +73,14 @@ public class Calender : MonoBehaviour
             mapChoices.enabled = true;
             calenderCanvas.enabled = false;
             dayCanvas.enabled = false;
+            buyCanvas.enabled = false;
         }
         else
         {
             mapChoices.enabled = false;
             calenderCanvas.enabled = true;
             dayCanvas.enabled = false;
+            buyCanvas.enabled = false;
             GetCurrentValues();
             NumberButtons();
         }
@@ -73,6 +89,7 @@ public class Calender : MonoBehaviour
     public void OpenDay(TMP_Text Day)
     {
         mapChoices.enabled = false;
+        buyCanvas.enabled = false;
         calenderCanvas.enabled = false;
         dayCanvas.enabled = true;
         if (Day.text == "")
