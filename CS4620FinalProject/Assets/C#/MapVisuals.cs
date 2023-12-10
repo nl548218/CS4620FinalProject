@@ -7,20 +7,23 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.IO;
+using static UnityEngine.Random; 
 
 public class MapVisuals : MonoBehaviour
 {
+    public GameObject clicker; 
     public TMP_Text moneyTxt;
     public TMP_Text currentDateTxt;
     public Image messageDisplay;
     public TMP_Text messageTxt;
+    bool vending; 
     string dbname;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        UpdateDbMoney(-5000);
+        UpdateDbMoney(0);
         UpdateMoney();
         UpdateDate();
         UpdateMessage();
@@ -29,7 +32,32 @@ public class MapVisuals : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        UpdateMoney();
+        UpdateDate();
+        UpdateMessage();
+    }
+    public void Click(){
+        clicker.SetActive(true); 
+    }
+
+    public void buying(){
+        if(vending == false){
+        vending = true; 
+             UpdateDbMoney(-2000); 
+        }
+    }
+
+    public void vendingMachine(){
+       
+        if(vending == true){
+        int randy = Range(400, 600);
+        UpdateDbMoney(randy);
+        }
+    }
+
+    public void moneyLoss(int payment){
+
+        UpdateDbMoney(payment);
     }
 
     private void UpdateMoney()
